@@ -1,0 +1,17 @@
+<form class="row mt-3 mx-4" [formGroup]="form">
+  <div>
+    <hr>
+    <h5>Payment info</h5>
+  </div>
+  <div class="col-12  mt-2 pr-sm-2">
+    <input class="order-form-select" type="number" placeholder="Card number"
+           formControlName="cardNumber">
+    <small *ngIf="form.get('cardNumber').value">Card type: {{cardType}}</small>
+  </div>
+  <div class="col-12 mt-2 pr-sm-2">
+    <input class="order-form-select" type="number" maxlength="3" placeholder="CCV" formControlName="ccvCode">
+  </div>
+  <div class="col-12 mt-2 pr-sm-2">
+    <input class="order-form-select" type="date" placeholder="Exp. date" formControlName="expDate">
+  </div>
+</form>

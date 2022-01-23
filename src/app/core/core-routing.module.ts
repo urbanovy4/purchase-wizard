@@ -5,15 +5,15 @@ const routes: Routes = [
   {path: '', redirectTo: 'pricing', pathMatch: 'full'},
   {
     path: 'pricing',
-    loadChildren: () => import('./pricing/pricing.module').then(m => m.PricingModule)
+    loadChildren: () => import('./pages/pricing/pricing.module').then(m => m.PricingModule)
   },
   {
     path: 'order',
-    loadChildren: () => import('./order/order.module').then(m => m.OrderModule)
+    loadChildren: () => import('./pages/order/order.module').then(m => m.OrderModule)
   },
   {
     path: 'preview',
-    loadChildren: () => import('./preview/preview.module').then(m => m.PreviewModule)
+    loadChildren: () => import('./pages/preview/preview.module').then(m => m.PreviewModule)
   }
 ];
 

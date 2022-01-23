@@ -1,1 +1,1 @@
-export * from './card/card.service';
+export * from './wizard/wizard.service';

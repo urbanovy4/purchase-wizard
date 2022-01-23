@@ -1,0 +1,19 @@
+<ng-container>
+  <div class="card-header d-flex justify-content-between">
+    <div>
+      <span>{{card.name}}</span>
+    </div>
+    <div>
+      <span *ngIf="card.bestOffer">Best offer</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <ul>
+      <li *ngFor="let reason of card.reasons">{{reason}}</li>
+    </ul>
+    <h5 class="card-title d-flex justify-content-center">{{card.price | currency}}</h5>
+  </div>
+  <div class="card-footer d-flex justify-content-center">
+    <button class="btn btn-primary" (click)="selectSubscription.emit(card.id)">Select</button>
+  </div>
+</ng-container>

@@ -1,0 +1,33 @@
+<form class="row mt-3 mx-4" [formGroup]="form">
+  <div class="col-12">
+    <hr>
+    <h5>Address info</h5>
+  </div>
+  <div class="col-12 mt-2" formArrayName="streets">
+    <div *ngFor="let street of getFormsControls()['controls']; let i = index">
+      <input class="order-form-select" [placeholder]="'Street Address ' + (i + 1)" [formControlName]="i">
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 mt-2 pr-sm-2">
+    <input class="order-form-select" placeholder="City" formControlName="city">
+  </div>
+  <div class="col-12 col-sm-6 mt-2 pr-sm-2">
+    <input class="order-form-select" placeholder="Postal / Zip Code" formControlName="zipCode">
+  </div>
+<!--  <ng-container *ngIf="countries?.length">-->
+    <div class="col-12 col-sm-6 mt-2 pl-sm-0" [ngClass]="{'col-sm-12': !form.get('state')}">
+      <select class="form-select order-form-select" formControlName="country">
+        <option disabled selected value="">Countries</option>
+        <option *ngFor="let country of countries" [value]="country.countryName">{{country.countryName}}</option>
+      </select>
+    </div>
+<!--  </ng-container>-->
+  <ng-container *ngIf="form.get('state')">
+    <div class="col-12 col-sm-6 mt-2 pl-sm-0">
+      <select class="form-select order-form-select" formControlName="state">
+        <option disabled selected value="">State</option>
+        <option *ngFor="let state of usStates" [value]="state.name">{{state.name}}</option>
+      </select>
+    </div>
+  </ng-container>
+</form>

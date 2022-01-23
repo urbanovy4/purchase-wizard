@@ -1,0 +1,19 @@
+<div class="mt-3">
+  <div class="plan-title d-flex align-items-center justify-content-center">
+    <h3 class="">Select your plan</h3>
+  </div>
+  <ul class="nav nav-tabs">
+    <li
+      class="nav-item"
+      *ngFor="let type of cardTypes | enumToArray"
+      (click)="selectCardsType(type)">
+      <a class="nav-link" [ngClass]="{'active': (selectedCardType | async) === type}">{{type}}</a>
+    </li>
+  </ul>
+
+  <div class="cards-wrapper d-flex justify-content-between mt-5">
+    <div *ngFor="let card of getCards() | async" class="card text-white bg-primary mb-3 w-100" style="max-width: 17rem;">
+      <app-card-item [card]="card" (selectSubscription)="selectSubscription($event)"></app-card-item>
+    </div>
+  </div>
+</div>
