@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { fakeBackendProvider } from './helpers';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { fakeBackendProvider } from './helpers';
     HttpClientModule
   ],
   providers: [
-    fakeBackendProvider
+    fakeBackendProvider,
+    {provide: 'COUNTRIES_URL', useValue: environment.countriesUrl},
   ],
   bootstrap: [AppComponent]
 })

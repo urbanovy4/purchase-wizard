@@ -10,7 +10,7 @@ import {
 import { Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { CardItem, CardType, UsState } from '../../core/models';
+import { CardItem, SubscriptionType, UsState } from '../../core/models';
 import { mockCards } from '../mock/mock-cards';
 import { mockStates } from '../mock/mock-us-states'
 
@@ -21,13 +21,13 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     let states: UsState[] = [];
 
     return of(null).pipe(mergeMap(() => {
-      if (req.url.endsWith(CardType.Personal) && req.method === 'GET') {
-        cards = this.sortByType(mockCards, CardType.Personal);
+      if (req.url.endsWith(SubscriptionType.Personal) && req.method === 'GET') {
+        cards = this.sortByType(mockCards, SubscriptionType.Personal);
         return of(new HttpResponse({status: 200, body: cards}));
       }
 
-      if (req.url.endsWith(CardType.Enterprise) && req.method === 'GET') {
-        cards = this.sortByType(mockCards, CardType.Enterprise);
+      if (req.url.endsWith(SubscriptionType.Enterprise) && req.method === 'GET') {
+        cards = this.sortByType(mockCards, SubscriptionType.Enterprise);
         return of(new HttpResponse({status: 200, body: cards}));
       }
 
@@ -36,11 +36,15 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         return of(new HttpResponse({status: 200, body: states}))
       }
 
+      if (req.url.endsWith('complete-purchase') && req.method === 'POST') {
+        return of(new HttpResponse({status: 200}));
+      }
+
       return next.handle(req);
     }))
   }
 
-  private sortByType(arr: CardItem[], type: CardType): CardItem[] {
+  private sortByType(arr: CardItem[], type: SubscriptionType): CardItem[] {
     return arr.filter(item => item.type === type);
   }
 }

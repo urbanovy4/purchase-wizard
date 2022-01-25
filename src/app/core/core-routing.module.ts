@@ -14,6 +14,10 @@ const routes: Routes = [
   {
     path: 'preview',
     loadChildren: () => import('./pages/preview/preview.module').then(m => m.PreviewModule)
+  },
+  {
+    path: 'complete',
+    loadChildren: () => import('./pages/complete/complete.module').then(m => m.CompleteModule)
   }
 ];
 

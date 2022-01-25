@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 
 import { WizardService } from '../../../../../shared/services';
-import { CardItem, CardType } from '../../../../models';
+import { CardItem, SubscriptionType } from '../../../../models';
 
 @Component({
   selector: 'app-pricing',
@@ -12,8 +12,8 @@ import { CardItem, CardType } from '../../../../models';
 })
 export class PricingComponent implements OnInit, OnDestroy {
 
+  public cardTypes = SubscriptionType;
   public selectedCardType: Observable<string>;
-  public cardTypes = CardType;
 
   constructor(
     private wizardService: WizardService
@@ -40,8 +40,8 @@ export class PricingComponent implements OnInit, OnDestroy {
       );
   }
 
-  public selectSubscription(id: number): void {
-    this.wizardService.selectSubscription(id);
+  public selectSubscription(card: CardItem): void {
+    this.wizardService.selectSubscription(card);
     this.wizardService.navigateTo('/order')
   }
 

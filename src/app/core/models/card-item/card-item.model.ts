@@ -5,14 +5,14 @@ export interface CardItem extends SubscriptionName {
   id: number;
   price: number;
   reasons: string[];
-  type: CardType;
+  type: SubscriptionType;
   bestOffer?: boolean;
 }
 
 /**
  * Card item type
  */
-export enum CardType {
+export enum SubscriptionType {
   Personal = 'Personal',
   Enterprise = 'Enterprise'
 }

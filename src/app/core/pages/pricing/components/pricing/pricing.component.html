@@ -11,9 +11,10 @@
     </li>
   </ul>
 
-  <div class="cards-wrapper d-flex justify-content-between mt-5">
-    <div *ngFor="let card of getCards() | async" class="card text-white bg-primary mb-3 w-100" style="max-width: 17rem;">
-      <app-card-item [card]="card" (selectSubscription)="selectSubscription($event)"></app-card-item>
+  <div class="cards-wrapper row justify-content-center mt-5">
+    <div *ngFor="let card of getCards() | async" class="card col-12 col-md-6 col-lg-4 text-white bg-primary mb-3 w-100"
+         style="max-width: 17rem;">
+      <app-card-item [card]="card" (selectSubscriptionEvent)="selectSubscription($event)"></app-card-item>
     </div>
   </div>
 </div>

@@ -4,31 +4,38 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { CardItem, CardType, Country, UsState } from '../../../core/models';
+import { CardItem, SubscriptionType, Country, UsState, Order, PreviewData } from '../../../core/models';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WizardService {
-  private _selectedCardsType$: BehaviorSubject<string> = new BehaviorSubject<string>(CardType.Personal);
-  public readonly selectedCardsType: Observable<string> = this._selectedCardsType$.asObservable();
+  private selectedCardsType$: BehaviorSubject<string> = new BehaviorSubject<string>(SubscriptionType.Personal);
+  public readonly selectedCardsType: Observable<string> = this.selectedCardsType$.asObservable();
 
-  private _selectedSubscription$: Subject<number> = new Subject<number>();
-  public readonly selectedSubscription: Observable<number> = this._selectedSubscription$.asObservable();
+  private selectedCurrency$: BehaviorSubject<string> = new BehaviorSubject<string>('Dollar');
+  public readonly selectedCurrency: Observable<string> = this.selectedCurrency$.asObservable();
 
-  private _notifyToUnsubscribe$: Subject<null> = new Subject<null>();
-  public readonly notifyToUnsubscribe: Observable<null> = this._notifyToUnsubscribe$.asObservable();
+  private selectedSubscription$: BehaviorSubject<CardItem> = new BehaviorSubject<CardItem>(null);
+  public readonly selectedSubscription: Observable<CardItem> = this.selectedSubscription$.asObservable();
+
+  private orderData$: BehaviorSubject<Order> = new BehaviorSubject<Order>(null);
+  public readonly orderData: Observable<Order> = this.orderData$.asObservable();
+
+  private shouldShowLoader$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public readonly shouldShowLoader: Observable<boolean> = this.shouldShowLoader$.asObservable();
+
+  private isCompleted$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public readonly isCompleted: Observable<boolean> = this.isCompleted$.asObservable();
+
+  private notifyToUnsubscribe$: Subject<null> = new Subject<null>();
+  public readonly notifyToUnsubscribe: Observable<null> = this.notifyToUnsubscribe$.asObservable();
 
   constructor(
-    private _http: HttpClient,
-    private _router: Router,
+    private http: HttpClient,
+    private router: Router,
     @Inject('COUNTRIES_URL') private readonly countriesUrl: string
   ) {
-  }
-
-  /**
-   * Get all cards by type
-   */
-  public getAllByType(type: string): Observable<CardItem[]> {
-    return this._http.get<CardItem[]>(`api/cards/${type}`);
   }
 
   /**
@@ -36,33 +43,69 @@ export class WizardService {
    * @param type
    */
   public selectCardsType(type: string): void {
-    this._selectedCardsType$.next(type);
+    this.selectedCardsType$.next(type);
   }
 
   /**
    * Select subscription
-   * @param id
+   * @param card
    */
-  public selectSubscription(id: number): void {
-    this._selectedSubscription$.next(id);
+  public selectSubscription(card: CardItem): void {
+    this.selectedSubscription$.next(card);
+  }
+
+  /**
+   * Save order
+   */
+  public saveOrder(order: Order): void {
+    this.orderData$.next(order);
+  }
+
+  /**
+   * Notify to unsubscribe
+   */
+  public onUnsubscribe(): void {
+    this.notifyToUnsubscribe$.next(null);
+  }
+
+  /**
+   * Show loader
+   */
+  public showLoader(condition: boolean): void {
+    this.shouldShowLoader$.next(condition);
+  }
+
+  /**
+   * Change completion state
+   * @param state
+   */
+  public changeCompletionState(state: boolean): void {
+    this.isCompleted$.next(state);
+  }
+
+  /**
+   * Get all cards by type
+   */
+  public getAllByType(type: string): Observable<CardItem[]> {
+    return this.http.get<CardItem[]>(`api/cards/${type}`);
   }
 
   /**
    * Get countries
    */
   public getCountries(): Observable<Country[]> {
-    return this._http.get<Country[]>(this.countriesUrl)
+    return this.http.get<Country[]>(this.countriesUrl)
       .pipe(
         map((countries: Array<any>) => {
           return countries
             .map(country => ({countryName: country['altSpellings'][1]}))
             .filter(country => country.countryName)
-            .sort((a, b) => {
-              if (a.countryName.toLowerCase() > b.countryName.toLowerCase()) {
+            .sort((previous, next) => {
+              if (previous.countryName.toLowerCase() > next.countryName.toLowerCase()) {
                 return 1;
               }
-              if (a.countryName.toLowerCase() < b.countryName.toLowerCase()) {
-               return -1;
+              if (previous.countryName.toLowerCase() < next.countryName.toLowerCase()) {
+                return -1;
               }
               return 0;
             });
@@ -71,25 +114,26 @@ export class WizardService {
   }
 
   /**
+   * Complete purchase
+   * @param data
+   */
+  public completePurchase(data: PreviewData): Observable<PreviewData> {
+    return this.http.post<PreviewData>('api/complete-purchase', data);
+  }
+
+  /**
    * Get us states
    */
   public getUsStates(): Observable<UsState[]> {
-    return this._http.get<UsState[]>('api/us-states');
+    return this.http.get<UsState[]>('api/us-states');
   }
 
   /**
    * Redirect to
    * @param url
    */
-  public navigateTo(url: string) {
-    this._router.navigate([url]);
-  }
-
-  /**
-   * Notify to unsubscribe
-   */
-  public onUnsubscribe(): void {
-    this._notifyToUnsubscribe$.next(null);
+  public navigateTo(url: string): void {
+    this.router.navigate([url]);
   }
 
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { PreviewRoutingModule } from './preview-routing.module';
 import { PreviewComponent } from './components/preview/preview.component';
+import { SharedModule } from '../../../shared/shared.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { PreviewComponent } from './components/preview/preview.component';
   ],
   imports: [
     CommonModule,
-    PreviewRoutingModule
+    PreviewRoutingModule,
+    SharedModule
   ]
 })
 export class PreviewModule { }

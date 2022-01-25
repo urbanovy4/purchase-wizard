@@ -4,14 +4,34 @@
     <h5>Payment info</h5>
   </div>
   <div class="col-12  mt-2 pr-sm-2">
-    <input class="order-form-select" type="number" placeholder="Card number"
-           formControlName="cardNumber">
-    <small *ngIf="form.get('cardNumber').value">Card type: {{cardType}}</small>
+    <input
+      class="order-form-select"
+      type="number"
+      placeholder="Card number"
+      formControlName="cardNumber">
+    <div class="invalid-message" *ngIf="form.get('cardNumber').invalid && form.get('cardNumber').touched">
+      <span *ngIf="form.get('cardNumber').errors['cardInvalid']">Incorrect card number</span>
+      <span
+        *ngIf="form.get('cardNumber').errors['lengthError']">The length of the card must be sixteen characters.</span>
+    </div>
+    <small *ngIf="form.get('cardType')?.value">Card type: <strong>{{form.get('cardType').value}}</strong></small>
   </div>
   <div class="col-12 mt-2 pr-sm-2">
-    <input class="order-form-select" type="number" maxlength="3" placeholder="CCV" formControlName="ccvCode">
+    <input
+      class="order-form-select"
+      type="number"
+      maxlength="3"
+      placeholder="CCV"
+      formControlName="ccvCode">
+    <div class="invalid-message" *ngIf="form.get('ccvCode').invalid && form.get('ccvCode').touched">
+      <span *ngIf="form.get('ccvCode').errors['ccvInvalid']">The length of ccv code must be three characters.</span>
+    </div>
   </div>
   <div class="col-12 mt-2 pr-sm-2">
-    <input class="order-form-select" type="date" placeholder="Exp. date" formControlName="expDate">
+    <input
+      class="order-form-select"
+      type="date"
+      placeholder="Exp. date"
+      formControlName="expDate">
   </div>
 </form>

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+
 import { CardItem } from '../../../core/models';
 
 @Component({
@@ -9,5 +10,9 @@ import { CardItem } from '../../../core/models';
 })
 export class CardItemComponent {
   @Input('card') card: CardItem;
-  @Output() selectSubscription: EventEmitter<number> = new EventEmitter<number>();
+  @Output() selectSubscriptionEvent: EventEmitter<CardItem> = new EventEmitter<CardItem>();
+
+  public selectSubscription(card: CardItem): void {
+    this.selectSubscriptionEvent.emit(card);
+  }
 }

@@ -1,1 +1,12 @@
-<p>preview works!</p>
+<ng-container *ngIf="previewData | async">
+  <app-loader *ngIf="shouldShowLoader | async; else preview"></app-loader>
+</ng-container>
+
+<ng-template #preview>
+  <app-preview-layout
+    [previewData]="previewData | async"
+    [currency]="currency | async"
+    (completePurchaseEvent)="completePurchase()"
+  >
+  </app-preview-layout>
+</ng-template>

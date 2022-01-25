@@ -1,3 +1,10 @@
+.card-body {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .card-footer {
   button {
     width: 70%;

@@ -20,10 +20,7 @@ import {
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-import { Country, UsState } from '../../../core/models';
-import { AddressFormValue } from '../../../core/models';
-
-
+import { Country, UsState, AddressFormValue } from '../../../core/models';
 
 @Component({
   selector: 'app-address-form',
@@ -81,14 +78,22 @@ export class AddressFormComponent implements OnInit, OnDestroy, ControlValueAcce
       country: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
       streets: new FormArray([
-        // new FormControl('', Validators.required)
+        new FormControl('', Validators.required)
       ]),
       zipCode: new FormControl('', Validators.required)
     });
   }
 
-  public getFormsControls(): FormArray {
+  public getStreetsControls(): FormArray {
     return this.form.controls['streets'] as FormArray;
+  }
+
+  public addStreet(): void {
+    (<FormArray>this.form.get('streets')).push(new FormControl('', Validators.required))
+  }
+
+  public removeStreet(index: number): void {
+    (<FormArray>this.form.get('streets')).removeAt(index);
   }
 
   public set value(value: AddressFormValue) {

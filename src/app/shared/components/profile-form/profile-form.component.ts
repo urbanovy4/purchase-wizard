@@ -11,9 +11,6 @@ import { Subscription } from 'rxjs';
 
 import { ProfileFormValue } from '../../../core/models';
 
-
-
-
 @Component({
   selector: 'app-profile-form',
   templateUrl: './profile-form.component.html',
@@ -64,7 +61,10 @@ export class ProfileFormComponent implements OnInit, OnDestroy, ControlValueAcce
       name: new FormControl('', Validators.required),
       surname: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
-      phone: new FormControl('', [Validators.required])
+      phone: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')
+      ])
     });
   }
 

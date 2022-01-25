@@ -5,6 +5,7 @@ import {
 import { Subscription } from 'rxjs';
 
 import { CardTypes, PaymentFormValue } from '../../../core/models';
+import { ccvValidator, creditCardValidator } from '../../utils/utils';
 
 
 @Component({
@@ -48,6 +49,8 @@ export class PaymentFormComponent implements OnInit, OnDestroy, ControlValueAcce
         this.onTouched();
       })
     );
+    // this.addCardTypeControl();
+    this.selectCardType()
   }
 
   public ngOnDestroy(): void {
@@ -58,31 +61,40 @@ export class PaymentFormComponent implements OnInit, OnDestroy, ControlValueAcce
     this.form.setValue(<PaymentFormValue>{
       cardNumber: value.cardNumber,
       ccvCode: value.ccvCode,
-      expDate: value.expDate
+      expDate: value.expDate,
+      cardType: value.cardType
     });
   }
 
   private initForm(): void {
     this.form = new FormGroup({
-      cardNumber: new FormControl('', [
-        Validators.required,
-        Validators.minLength(16),
-        Validators.maxLength(16)
-      ]),
-      ccvCode: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(3)
-      ]),
-      expDate: new FormControl('', [Validators.required])
+      cardNumber: new FormControl('', [Validators.required, creditCardValidator()]),
+      ccvCode: new FormControl('', [Validators.required, ccvValidator()]),
+      expDate: new FormControl('', [Validators.required]),
+      cardType: new FormControl('', Validators.required)
     });
   }
 
-  private checkForCardType(cardNumber: string): void {
-    if (cardNumber.startsWith('3')) this.cardType = CardTypes.AmericanExpress;
-    if (cardNumber.startsWith('4')) this.cardType = CardTypes.Visa;
-    if (cardNumber.startsWith('5')) this.cardType = CardTypes.MasterCard;
-    if (cardNumber.startsWith('6')) this.cardType = CardTypes.Discover;
+  private selectCardType(): void {
+    this.subscriptions.push(
+      this.form.get('cardNumber').valueChanges
+        .subscribe((cardNumber: number) => {
+          this.checkCardType(cardNumber);
+        })
+    );
+  }
+
+  private checkCardType(cardNumber: number): void {
+    const cardNumberStr: string = cardNumber + '';
+    if (cardNumberStr.startsWith('4')) {
+      this.form.get('cardType').setValue(CardTypes.Visa);
+    } else if (cardNumberStr.startsWith('5')) {
+      this.form.get('cardType').setValue(CardTypes.MasterCard);
+    } else if (cardNumberStr.startsWith('6')) {
+      this.form.get('cardType').setValue(CardTypes.Discover);
+    } else {
+      this.form.get('cardType').setValue('');
+    }
   }
 
   public registerOnChange(fn: any): void {

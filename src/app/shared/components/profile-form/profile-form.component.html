@@ -1,13 +1,19 @@
-<form [formGroup]="form">
+<form class="needs-validation" [formGroup]="form">
   <div class="row mx-4">
     <div class="col-12 mb-2">
       <h5>Profile info</h5>
     </div>
     <div class="col-12 col-sm-6">
       <input class="order-form-select" placeholder="Name" formControlName="name">
+      <div class="invalid-message" *ngIf="form.get('name').invalid && form.get('name').touched">
+        <span *ngIf="form.get('name').errors['required']">This field is required.</span>
+      </div>
     </div>
     <div class="col-12 col-sm-6 mt-2 mt-sm-0">
       <input class="order-form-select" placeholder="Surname" formControlName="surname">
+      <div class="invalid-message" *ngIf="form.get('surname').invalid && form.get('surname').touched">
+        <span *ngIf="form.get('surname').errors['required']">This field is required.</span>
+      </div>
     </div>
   </div>
 
@@ -15,11 +21,19 @@
     <div class="col-12">
       <input class="order-form-select" placeholder="Email" formControlName="email">
     </div>
+    <div class="invalid-message" *ngIf="form.get('email').invalid && form.get('email').touched">
+      <span *ngIf="form.get('email').errors['email']">Pleas write valid email.</span>
+      <span *ngIf="form.get('email').errors['required']">This field is required.</span>
+    </div>
   </div>
 
   <div class="row mt-3 mx-4">
     <div class="col-12">
       <input class="order-form-select" placeholder="Phone" formControlName="phone">
+    </div>
+    <div class="invalid-message" *ngIf="form.get('phone').invalid && form.get('phone').touched">
+      <span *ngIf="form.get('phone').errors['pattern']">Pleas write valid phone numbers.</span>
+      <span *ngIf="form.get('phone').errors['required']">This field is required.</span>
     </div>
   </div>
 </form>

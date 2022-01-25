@@ -1,0 +1,33 @@
+<div class="preview-wrapper">
+  <div class="preview">
+    <div class="title">
+      <h4>Order preview</h4>
+      <hr>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">Selected subscription: {{previewData.subscriptionName}}</h5>
+        <p class="card-text">
+          <strong>Selected price:</strong> <span *ngIf="previewData.price; else free">{{previewData.price}}</span></p>
+        <p class="card-text">
+          <strong>Currency:</strong> {{currency}}
+        </p>
+        <p class="card-text">
+          <strong>Card number:</strong> {{previewData.cardNumber | hideCardNumber: 4}}
+        </p>
+        <p class="card-text">
+          <strong>Card type:</strong> {{previewData.cardType}}
+        </p>
+        <div class="text-center">
+          <button class="btn btn-primary" (click)="completePurchaseEvent.emit()">Complete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #free>
+  <span> Free</span>
+</ng-template>
